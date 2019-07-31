@@ -5,8 +5,8 @@ const initCommands = require('./initCommands');
 
 module.exports = new System({ name: 'commands' })
 	.add('commands.factories', initFactories())
-	.dependsOn('config', 'logger')
 	.add('commands.handlers', initHandlers())
-	.dependsOn('config', 'logger')
 	.add('commands', initCommands())
-	.dependsOn({ component: 'commands.factories', destination: 'factories' }, { component: 'commands.handlers', destination: 'handlers' });
+	.dependsOn(
+		'store',
+		{ component: 'commands.factories', destination: 'factories' });
