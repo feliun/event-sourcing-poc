@@ -3,8 +3,8 @@ module.exports = () => {
 		book: {
 			create: {
 				v1: book => ({
-					operation: 'create',
 					entity: 'book',
+					operation: 'create',
 					apiVersion: 1,
 					payload: book,
 					timestamp: new Date(),

@@ -14,8 +14,10 @@ module.exports = () => {
 
 		const subscribe = (subscription, handler) => {
 			const channel = subscriptions[subscription];
-			debug(`Just received a message from channel ${channel}...`);
-			emitter.on(channel, handler);
+			emitter.on(channel, async (...args) => {
+				debug(`Just received a message from channel ${channel}...`);
+				await handler(...args);
+			});
 		};
 
 		return {
