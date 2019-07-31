@@ -5,7 +5,7 @@ module.exports = {
 	},
 	bus: {
 		subscriptions: {
-
+			handleCommand: 'book-api.v1.command.received',
 		},
 		publications: {
 			commandReceived: 'book-api.v1.command.received',
