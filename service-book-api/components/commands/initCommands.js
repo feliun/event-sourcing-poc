@@ -1,5 +1,6 @@
 module.exports = () => {
-	const start = async ({ factories, store }) => {
+	const start = async ({ factories, store, bus }) => {
+		const publishCommand = bus.publish('commandReceived');
 		const books = {
 			v1: {
 				create: async book => {
@@ -7,7 +8,7 @@ module.exports = () => {
 					// TODO validation happens inside
 					// TODO create this with the help of mixins
 					await store.commands.audit(command);
-					// TODO await bus.publish
+					await publishCommand(command);
 				},
 			},
 		};

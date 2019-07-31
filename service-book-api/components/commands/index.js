@@ -9,4 +9,5 @@ module.exports = new System({ name: 'commands' })
 	.add('commands', initCommands())
 	.dependsOn(
 		'store',
+		'bus',
 		{ component: 'commands.factories', destination: 'factories' });
