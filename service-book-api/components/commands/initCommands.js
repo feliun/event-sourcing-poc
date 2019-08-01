@@ -17,7 +17,6 @@ module.exports = () => {
 			},
 		};
 
-		// on command subscription -> book/handler/execute (per type to know which event to create)
 		const onCommandReceived = async command => {
 			const { entity, operation } = command;
 			debug(`Command received! Entity ${entity} and operation ${operation}...`);

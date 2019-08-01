@@ -1,14 +1,16 @@
 // -> book/projection/ -> apply all reducers (potentially cache it)
 // -> generate event -> publish
+const debug = require('debug')('service-book-api:books:commands:handlers:create');
+const initProjection = require('../../projection');
 
-const debug = require('debug')('service-book-api:commands:handlers:create');
+module.exports = ({ store }) => {
+	const project = initProjection(store);
 
-module.exports = ({ store, bus }) => {
-	const execute = async (command) => {
-    const bookCommands = await store.commands.retrieve('books', command.id);
-    console.log(bookCommands);
-		console.log('Calling the projection, which will access the store, and apply all reducers');
-		console.log('Later on I will construct an event and publish');
+	const execute = async command => {
+		debug('Running handler for any "book create" command...');
+		const projection = await project(command);
+		console.log(projection);
+		debug('Later on I will construct an event and publish');
 	};
 
 	return { execute };
