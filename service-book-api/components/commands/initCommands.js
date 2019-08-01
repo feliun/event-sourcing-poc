@@ -5,16 +5,11 @@ const models = require('require-all')(join(__dirname, '..', '..', 'models'));
 module.exports = () => {
 	const start = async ({ store, bus }) => {
 		const publishCommand = bus.publish('commandReceived');
-		// TODO this should be a generic "processCommand" - creates the command, audit and publish
-		const booksApi = {
-			v1: {
-				create: async book => {
-					const command = models.books.commands.factories.create.v1(book);
-					// TODO validation happens inside
-					await store.commands.audit(command);
-					await publishCommand(command);
-				},
-			},
+		const process = async (entity, version, action, payload) => {
+			const factory = models[entity].commands.factories[action][version];
+			const command = factory(payload); // TODO validation happens inside
+			await store.commands.audit(command);
+			await publishCommand(command);
 		};
 
 		const onCommandReceived = async command => {
@@ -28,7 +23,7 @@ module.exports = () => {
 
 		bus.subscribe('handleCommand', onCommandReceived);
 
-		return { books: booksApi };
+		return { process };
 	};
 
 	return { start };
