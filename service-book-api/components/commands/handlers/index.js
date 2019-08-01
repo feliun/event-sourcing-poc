@@ -11,6 +11,7 @@ module.exports = () => {
 			const { execute } = handler({ store });
 			debug(`Running command for entity ${entity} and operation ${operation}...`);
 			await execute(command);
+			// we should get all commands and execute all of them as reducers, create the event and publish the projection
 		};
 
 		bus.subscribe('handleCommand', onCommandReceived);

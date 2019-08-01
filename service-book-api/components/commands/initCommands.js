@@ -1,10 +1,13 @@
+const { join } = require('path');
+const { books } = require('require-all')(join(__dirname, '..', '..', 'models'));
+
 module.exports = () => {
-	const start = async ({ factories, store, bus }) => {
+	const start = async ({ store, bus }) => {
 		const publishCommand = bus.publish('commandReceived');
-		const books = {
+		const booksApi = {
 			v1: {
 				create: async book => {
-					const command = factories.book.create.v1(book);
+					const command = books.commands.factories.create.v1(book);
 					// TODO validation happens inside
 					// TODO create this with the help of mixins
 					await store.commands.audit(command);
@@ -13,7 +16,7 @@ module.exports = () => {
 			},
 		};
 
-		return { books };
+		return { books: booksApi };
 	};
 
 	return { start };

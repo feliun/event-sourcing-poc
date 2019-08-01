@@ -5,6 +5,7 @@ module.exports = ({ store }) => {
 			timestamp,
 			lastRecorded,
 		});
+		// CREATE SHOULD BE A REDUCER that returns the initial book
 	};
 
 	return { execute };
