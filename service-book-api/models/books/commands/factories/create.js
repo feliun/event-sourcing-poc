@@ -1,11 +1,13 @@
+// TODO create this with the help of mixins
+
 const v1 = book => ({
-	entity: 'book',
+	entity: 'books',
 	operation: 'create',
 	apiVersion: 1,
 	payload: book,
 	timestamp: new Date(),
 	lastRecorded: new Date(),
-	// TODO checksum id
+	id: 1, // TODO checksum id that identifies the actual book
 });
 
 module.exports = { v1 };

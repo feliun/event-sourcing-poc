@@ -10,6 +10,12 @@ module.exports = () => {
 				commands.push(command);
 				debug(`Current commands: ${JSON.stringify(commands)}`);
 			},
+			retrieve: async (type, id) => {
+				debug(`Retrieving commands related to type ${type} and id ${id}`);
+				return commands
+					.filter(command => command.entity === type && command.id === id)
+					.sort(command => command.timestamp);
+			},
 		},
 		books: {
 			create: async book => {
