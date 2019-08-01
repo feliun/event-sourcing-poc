@@ -9,6 +9,7 @@ module.exports = () => {
 		const publish = publication => async payload => {
 			const channel = publications[publication];
 			debug(`Publishing message on channel ${channel}...`);
+			debug(payload);
 			emitter.emit(channel, payload);
 		};
 
