@@ -3,4 +3,4 @@ const initStore = require('./initStore');
 
 module.exports = new System({ name: 'store' })
 	.add('store', initStore())
-	.dependsOn('logger');
+	.dependsOn('logger', 'config');

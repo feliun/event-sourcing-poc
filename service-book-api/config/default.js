@@ -13,6 +13,11 @@ module.exports = {
 			bookAmended: 'book-api.v1.book.amended',
 		},
 	},
+	store: {
+		url: process.env.MONGO_URL || 'mongodb://node:node@localhost:27017/eventsourcing',
+		db: process.env.MONGO_DB || 'eventsourcing',
+		options: { useNewUrlParser: true },
+	},
 	routes: {
 		admin: {
 			swaggerOptions: {

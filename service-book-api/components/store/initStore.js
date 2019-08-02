@@ -1,30 +1,33 @@
 const debug = require('debug')('service-book-api:store');
+const { MongoClient } = require('mongodb');
 
 module.exports = () => {
-	const commands = [];
-	const books = [];
+	const start = async ({ config }) => {
+		const mongo = await MongoClient.connect(config.url, config.options);
+		const db = mongo.db(config.db);
+		debug('Configuring db....');
+		db.collection('audit').createIndex({ entity: 1, timestamp: 1, id: 1 });
 
-	const start = async () => ({
-		commands: {
-			audit: async command => {
-				commands.push(command);
-				debug(`Current commands: ${JSON.stringify(commands)}`);
-			},
-			retrieve: async (type, id) => {
-				debug(`Retrieving commands related to type ${type} and id ${id}`);
-				return commands
-					.filter(command => command.entity === type && command.id === id)
-					.sort(command => command.timestamp)
-					.reverse();
-			},
-		},
-		books: {
-			create: async book => {
-				books.push(book);
-				debug(`Current books: ${JSON.stringify(books)}`);
-			},
-		},
-	});
+		const audit = async payload => {
+			debug('Recording a new audited item...');
+			await db.collection('audit').insertOne(payload);
+		};
 
-	return { start };
+		const retrieve = async (type, id) => {
+			debug(`Retrieving commands related to type ${type} and id ${id}`);
+			const result = await db.collection('audit').find({ entity: type, id }).sort({ timestamp: 1 }).toArray();
+			return result;
+		};
+
+		return {
+			commands: {
+				audit,
+				retrieve,
+			},
+		};
+	};
+
+	return {
+		start,
+	};
 };
