@@ -19,10 +19,24 @@ module.exports = () => {
 			return result;
 		};
 
+		const getByEntity = async entity => {
+			debug(`Getting all commands for entity ${entity}`);
+			const result = await db.collection('audit')
+				.aggregate({
+					$group: {
+						entity,
+					},
+				})
+				.sort({ timestamp: 1 })
+				.toArray();
+			return result;
+		};
+
 		return {
 			commands: {
 				audit,
 				retrieve,
+				getByEntity,
 			},
 		};
 	};

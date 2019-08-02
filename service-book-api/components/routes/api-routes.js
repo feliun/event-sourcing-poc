@@ -1,6 +1,22 @@
 module.exports = () => {
 	const start = async ({ app, commands, logger }) => {
 		/**
+		 * This endpoint reindexes all books commands
+		 * @route POST /api/v1/books/reindex
+		 * @group Book API - exposed HTTP API for books
+		 * @returns 200 - Sucessful response
+		*/
+		app.post('/api/v1/books/reindex', async (req, res) => {
+			try {
+				await commands.reindex('books');
+				res.json({ ok: true });
+			} catch (e) {
+				logger.error(e);
+				res.sendStatus(500);
+			}
+		});
+
+		/**
 		 * This endpoint creates a book
 		 * @route POST /api/v1/books
 		 * @group Book API - exposed HTTP API for books

@@ -12,6 +12,11 @@ module.exports = () => {
 			await publishCommand(command);
 		};
 
+		const reindex = async entity => {
+			const commands = await store.commands.getByEntity(entity);
+			return Promise.all(commands.map(publishCommand));
+		};
+
 		const onCommandReceived = async command => {
 			const { entity, operation } = command;
 			debug(`Command received! Entity ${entity} and operation ${operation}...`);
@@ -23,7 +28,7 @@ module.exports = () => {
 
 		bus.subscribe('handleCommand', onCommandReceived);
 
-		return { process };
+		return { process, reindex };
 	};
 
 	return { start };
