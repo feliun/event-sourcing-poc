@@ -6,5 +6,8 @@ module.exports = store => async command => {
 	debug(`Retrieving all commands for books and id ${command.id}`);
 	const commands = await store.commands.retrieve('books', command.id);
 	debug(`Generating projection for books and id ${command.id}...`);
-	return commands.reduce(reducers[command.operation], {});
+	return commands.reduce((total, currentCommand) => {
+		const reducer = reducers[currentCommand.operation];
+		return reducer(total, currentCommand);
+	}, {});
 };

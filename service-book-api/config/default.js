@@ -10,6 +10,7 @@ module.exports = {
 		publications: {
 			commandReceived: 'book-api.v1.command.received',
 			bookCreated: 'book-api.v1.book.created',
+			bookAmended: 'book-api.v1.book.amended',
 		},
 	},
 	routes: {

@@ -1,11 +1,10 @@
-const debug = require('debug')('service-book-api:books:commands:factories:create');
+const debug = require('debug')('service-book-api:books:commands:factories:amend');
 
-// TODO create this with the help of mixins
 const v1 = book => {
-	debug('Building "create book" command');
+	debug('Building "amend book" command');
 	return {
 		entity: 'books',
-		operation: 'create',
+		operation: 'amend',
 		apiVersion: 1,
 		payload: book,
 		timestamp: new Date(),

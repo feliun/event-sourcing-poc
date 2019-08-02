@@ -14,7 +14,8 @@ module.exports = () => {
 				debug(`Retrieving commands related to type ${type} and id ${id}`);
 				return commands
 					.filter(command => command.entity === type && command.id === id)
-					.sort(command => command.timestamp);
+					.sort(command => command.timestamp)
+					.reverse();
 			},
 		},
 		books: {
