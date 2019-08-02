@@ -11,6 +11,7 @@ module.exports = {
 			commandReceived: 'book-api.v1.command.received',
 			bookCreated: 'book-api.v1.book.created',
 			bookAmended: 'book-api.v1.book.amended',
+			paragraphCreated: 'book-api.v1.paragraph.created',
 		},
 	},
 	store: {

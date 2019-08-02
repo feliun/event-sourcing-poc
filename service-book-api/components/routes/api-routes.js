@@ -54,6 +54,28 @@ module.exports = () => {
 			}
 		});
 
+		/**
+		 * This endpoint creates a paragraph in a book
+		 * @route POST /api/v1/paragraphs
+		 * @group Book API - exposed HTTP API for books
+		 * @returns 200 - Sucessful response
+		*/
+		app.post('/api/v1/books/:bookId/paragraphs', async (req, res) => {
+			const { body, params } = req;
+			const paragraph = {
+				...body,
+				bookId: params.bookId,
+			};
+			try {
+				await commands.process('paragraphs', 'v1', 'create', paragraph);
+				res.json({ ok: true });
+			} catch (e) {
+				logger.error(e);
+				res.sendStatus(500);
+			}
+		});
+
+
 		return Promise.resolve();
 	};
 
