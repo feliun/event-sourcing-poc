@@ -3,35 +3,49 @@ An event sourcing/CQRS POC using systemic
 
 ## Architecture diagram
 
-## Concepts
-
-### Models
-### Commands
-#### Factories
-#### Handlers
-### Events
-### Projection
-#### Reducers
-### Snapshots
-### Sagas
+![alt text](https://github.com/feliun/event-sourcing-poc/blob/master/Event%20sourcing.png?raw=true)
 
 ## Usage
+Start the service by doing
 
+```
+npm install
+npm run docker
 npm run start
-swagger
+````
+
+You will need Docker running in your machine.
+
+If you then go to `http://localhost:4000/api-docs` you should see a swagger UI showing the available endpoints.
 
 ## Tests
-curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo", "id": "1"}' http://localhost:4000/api/v1/books
+You can test the two available APIs with the following HTTP requests:
 
+### Book API
+Create a book
+```
+curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo", "id": "1"}' http://localhost:4000/api/v1/books
+```
+
+Update a book multiple times
+```
 curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "id": "1"}' http://localhost:4000/api/v1/books/1
 
 curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "location": "Madrid", "id": "1"}' http://localhost:4000/api/v1/books/1
 
 curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "location": "Caceres", "id": "1"}' http://localhost:4000/api/v1/books/1
-
+```
+Reindex all book commands
+```
 curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo"}' http://localhost:4000/api/v1/books/reindex
-
+```
+Get a book
+```
 curl -X GET http://localhost:4000/api/v1/books/1
+```
 
-
+### Paragraph API
+Create a paragraph on a book
+```
 curl -X POST -H "Content-Type: application/json" -d '{"title":"My paragraph", "text": "bla bla bla"}' http://localhost:4000/api/v1/books/1/paragraphs
+```
