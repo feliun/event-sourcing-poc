@@ -2,6 +2,11 @@ const debug = require('debug')('service-book-api:store');
 const { MongoClient } = require('mongodb');
 
 module.exports = () => {
+	const onlyTest = fn => (...args) => {
+		if (process.env.SERVICE_ENV !== 'test') throw new Error('Function only available in test mode!');
+		return fn(...args);
+	};
+
 	const start = async ({ config }) => {
 		const mongo = await MongoClient.connect(config.url, config.options);
 		const db = mongo.db(config.db);
@@ -34,7 +39,7 @@ module.exports = () => {
 		};
 
 		const upsert = async book => {
-			await db.collection('books').update({ id: book.id }, book, { upsert: true });
+			await db.collection('books').updateOne({ id: book.id }, { $set: book }, { upsert: true });
 			return book;
 		};
 
@@ -44,7 +49,13 @@ module.exports = () => {
 			return result;
 		};
 
+		const purge = async () => {
+			await db.collection('audit').deleteMany({});
+			await db.collection('books').deleteMany({});
+		};
+
 		return {
+			purge: onlyTest(purge),
 			commands: {
 				audit,
 				retrieve,
