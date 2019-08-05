@@ -19,13 +19,13 @@ module.exports = () => {
 			await db.collection('audit').insertOne(payload);
 		};
 
-		const retrieve = async (type, id, timestamp) => {
+		const retrieveCommands = async (type, id, timestamp) => {
 			debug(`Retrieving commands related to type ${type} and id ${id}`);
 			const result = await db.collection('audit').find({ entity: type, id, timestamp: { $lte: timestamp } }).sort({ timestamp: 1 }).toArray();
 			return result;
 		};
 
-		const getByEntity = async entity => {
+		const getCommandByEntity = async entity => {
 			debug(`Getting all commands for entity ${entity}`);
 			const result = await db.collection('audit')
 				.aggregate({
@@ -38,7 +38,7 @@ module.exports = () => {
 			return result;
 		};
 
-		const upsert = async book => {
+		const upsertBook = async book => {
 			await db.collection('books').updateOne({ id: book.id }, { $set: book }, { upsert: true });
 			return book;
 		};
@@ -58,11 +58,11 @@ module.exports = () => {
 			purge: onlyTest(purge),
 			commands: {
 				audit,
-				retrieve,
-				getByEntity,
+				retrieve: retrieveCommands,
+				getByEntity: getCommandByEntity,
 			},
 			books: {
-				upsert,
+				upsert: upsertBook,
 				retrieve: retrieveBook,
 			},
 		};
