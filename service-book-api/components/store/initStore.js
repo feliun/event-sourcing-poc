@@ -13,9 +13,9 @@ module.exports = () => {
 			await db.collection('audit').insertOne(payload);
 		};
 
-		const retrieve = async (type, id) => {
+		const retrieve = async (type, id, timestamp) => {
 			debug(`Retrieving commands related to type ${type} and id ${id}`);
-			const result = await db.collection('audit').find({ entity: type, id }).sort({ timestamp: 1 }).toArray();
+			const result = await db.collection('audit').find({ entity: type, id, timestamp: { $lte: timestamp } }).sort({ timestamp: 1 }).toArray();
 			return result;
 		};
 
