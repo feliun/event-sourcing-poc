@@ -12,6 +12,7 @@ describe('Books API Tests', () => {
 		const { app, store } = await sys.start();
 		request = supertest(app);
 		purge = store.purge;
+		await purge();
 	});
 
 	afterEach(async () => {
