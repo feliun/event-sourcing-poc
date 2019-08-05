@@ -38,6 +38,12 @@ module.exports = () => {
 			return book;
 		};
 
+		const retrieveBook = async query => {
+			debug(`Retrieving book with query ${JSON.stringify(query)}`);
+			const result = await db.collection('books').findOne(query);
+			return result;
+		};
+
 		return {
 			commands: {
 				audit,
@@ -46,6 +52,7 @@ module.exports = () => {
 			},
 			books: {
 				upsert,
+				retrieve: retrieveBook,
 			},
 		};
 	};

@@ -1,5 +1,5 @@
 module.exports = () => {
-	const start = async ({ app, commands, logger }) => {
+	const start = async ({ app, queries, commands, logger }) => {
 		/**
 		 * This endpoint reindexes all books commands
 		 * @route POST /api/v1/books/reindex
@@ -48,6 +48,23 @@ module.exports = () => {
 			try {
 				await commands.process('books', 'v1', 'amend', book);
 				res.json({ ok: true });
+			} catch (e) {
+				logger.error(e);
+				res.sendStatus(500);
+			}
+		});
+
+		/**
+		 * This endpoint retrieves a book
+		 * @route GET /api/v1/books/:bookId
+		 * @group Book API - exposed HTTP API for books
+		 * @returns 200 - Sucessful response
+		*/
+		app.get('/api/v1/books/:bookId', async (req, res) => {
+			const { params } = req;
+			try {
+				const book = await queries.books.getById(params.bookId);
+				res.json(book);
 			} catch (e) {
 				logger.error(e);
 				res.sendStatus(500);
