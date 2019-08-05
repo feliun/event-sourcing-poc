@@ -7,6 +7,7 @@ module.exports = () => {
 		const db = mongo.db(config.db);
 		debug('Configuring db....');
 		db.collection('audit').createIndex({ entity: 1, timestamp: 1, id: 1 });
+		db.collection('books').createIndex({ id: 1 });
 
 		const audit = async payload => {
 			debug('Recording a new audited item...');
@@ -32,11 +33,19 @@ module.exports = () => {
 			return result;
 		};
 
+		const upsert = async book => {
+			await db.collection('books').update({ id: book.id }, book, { upsert: true });
+			return book;
+		};
+
 		return {
 			commands: {
 				audit,
 				retrieve,
 				getByEntity,
+			},
+			books: {
+				upsert,
 			},
 		};
 	};

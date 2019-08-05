@@ -6,11 +6,14 @@ module.exports = {
 	bus: {
 		subscriptions: {
 			handleCommand: 'book-api.v1.command.received',
+			persistBookCreation: 'book-api.v1.book.created',
+			persistBookAmendment: 'book-api.v1.book.amended',
 		},
 		publications: {
 			commandReceived: 'book-api.v1.command.received',
 			bookCreated: 'book-api.v1.book.created',
 			bookAmended: 'book-api.v1.book.amended',
+			bookPersisted: 'book-api.v1.book.persisted',
 			paragraphCreated: 'book-api.v1.paragraph.created',
 		},
 	},
