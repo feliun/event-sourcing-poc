@@ -42,6 +42,10 @@ describe('Books API Tests', () => {
 			.get(`/api/v1/books/${bookId}`)
 			.expect(200);
 
+	const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+	const DIGESTION_TIME = 200;
+
 	it('returns manifest', () =>
 		request
 			.get('/__/manifest')
@@ -64,6 +68,7 @@ describe('Books API Tests', () => {
 	it('amends a book', async () => {
 		await create(book);
 		await amend(book.id, { ...book, city: 'Madrid' });
+		await delay(DIGESTION_TIME);
 		const getResponse = await get(book.id);
 		expect(getResponse.body.city).to.equal('Madrid');
 	});
@@ -71,9 +76,11 @@ describe('Books API Tests', () => {
 	it('amends a book multiple times', async () => {
 		await create(book);
 		await amend(book.id, { ...book, city: 'Madrid' });
+		await delay(DIGESTION_TIME);
 		const getResponse = await get(book.id);
 		expect(getResponse.body.city).to.equal('Madrid');
 		await amend(book.id, { ...book, city: 'Madrid', phone: 1111 });
+		await delay(DIGESTION_TIME);
 		const newGetResponse = await get(book.id);
 		expect(newGetResponse.body.phone).to.equal(1111);
 	});
