@@ -64,6 +64,7 @@ module.exports = () => {
 		const purge = async () => {
 			await db.collection('audit').deleteMany({});
 			await db.collection('books').deleteMany({});
+			await db.collection('authors').deleteMany({});
 		};
 
 		return {
