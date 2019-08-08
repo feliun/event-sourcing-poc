@@ -37,7 +37,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & C
 ```
 Reindex all book commands
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo"}' http://localhost:4000/api/v1/books/reindex
+curl -X POST http://localhost:4000/api/v1/books/reindex
 ```
 Get a book
 ```
@@ -48,4 +48,10 @@ curl -X GET http://localhost:4000/api/v1/books/1
 Create a paragraph on a book
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"title":"My paragraph", "text": "bla bla bla"}' http://localhost:4000/api/v1/books/1/paragraphs
+```
+
+### Author API
+Get an author
+```
+curl -X GET http://localhost:4000/api/v1/authors/1
 ```
