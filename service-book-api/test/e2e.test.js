@@ -42,6 +42,11 @@ describe('e2e tests', () => {
 			.get(`/api/v1/books/${bookId}`)
 			.expect(200);
 
+	const getAuthor = async authorId =>
+		request
+			.get(`/api/v1/authors/${authorId}`)
+			.expect(200);
+
 	const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 	const DIGESTION_TIME = 200;
@@ -62,7 +67,7 @@ describe('e2e tests', () => {
 			const getResponse = await getBook(book.id);
 			expect(getResponse.body.id).to.equal(book.id);
 			expect(getResponse.body.title).to.equal(book.title);
-			expect(getResponse.body.author).to.equal(book.author);
+			expect(getResponse.body.author).to.eql(book.author);
 			expect(getResponse.body).to.have.keys('timestamp', 'lastRecorded');
 		});
 
@@ -84,6 +89,21 @@ describe('e2e tests', () => {
 			await delay(DIGESTION_TIME);
 			const newGetResponse = await getBook(book.id);
 			expect(newGetResponse.body.phone).to.equal(1111);
+		});
+	});
+
+	describe('Authors API', () => {
+		it('persists an author when a book is created', async () => {
+			const response = await createBook(book);
+			expect(response.body).to.eql({ ok: true });
+			const { author } = book;
+			await delay(DIGESTION_TIME);
+			const getResponse = await getAuthor(author.id);
+			expect(getResponse.body.id).to.equal(author.id);
+			expect(getResponse.body.name).to.equal(author.name);
+			expect(getResponse.body.total_amends_cnt).to.equal(0);
+			expect(getResponse.body.total_created_cnt).to.equal(1);
+			expect(getResponse.body).to.have.keys('timestamp', 'lastRecorded');
 		});
 	});
 });

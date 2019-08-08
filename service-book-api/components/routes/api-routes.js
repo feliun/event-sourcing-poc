@@ -72,6 +72,23 @@ module.exports = () => {
 		});
 
 		/**
+		 * This endpoint retrieves an author
+		 * @route GET /api/v1/authors/:authorId
+		 * @group Author API - exposed HTTP API for authors
+		 * @returns 200 - Sucessful response
+		*/
+		app.get('/api/v1/authors/:authorId', async (req, res) => {
+			const { params } = req;
+			try {
+				const author = await queries.authors.getById(params.authorId);
+				res.json(author);
+			} catch (e) {
+				logger.error(e);
+				res.sendStatus(500);
+			}
+		});
+
+		/**
 		 * This endpoint creates a paragraph in a book
 		 * @route POST /api/v1/paragraphs
 		 * @group Book API - exposed HTTP API for books
