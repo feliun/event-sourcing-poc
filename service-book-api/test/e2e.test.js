@@ -105,5 +105,42 @@ describe('e2e tests', () => {
 			expect(getResponse.body.total_created_cnt).to.equal(1);
 			expect(getResponse.body).to.have.keys('timestamp', 'lastRecorded');
 		});
+
+		it('persists an author when a book is created and then amended', async () => {
+			const { author } = book;
+			await createBook(book);
+			await amendBook(book.id, { ...book, city: 'Madrid' });
+			await delay(DIGESTION_TIME);
+			await amendBook(book.id, { ...book, city: 'Madrid', phone: 1111 });
+			await delay(DIGESTION_TIME);
+			const getResponse = await getAuthor(author.id);
+			expect(getResponse.body.total_created_cnt).to.equal(1);
+			expect(getResponse.body.total_amends_cnt).to.equal(2);
+		});
+
+		it('persists an author when many books are created and amended', async () => {
+			const anotherBook = {
+				...book,
+				id: 2,
+			};
+			const { author } = book;
+			await createBook(book);
+			await amendBook(book.id, { ...book, city: 'Madrid' });
+			await delay(DIGESTION_TIME);
+			await amendBook(book.id, { ...book, city: 'Madrid', phone: 1111 });
+			await delay(DIGESTION_TIME);
+
+			await createBook(anotherBook);
+			await amendBook(anotherBook.id, { ...anotherBook, city: 'Madrid' });
+			await delay(DIGESTION_TIME);
+			await amendBook(anotherBook.id, { ...anotherBook, city: 'Madrid', phone: 1111 });
+			await delay(DIGESTION_TIME);
+			await amendBook(anotherBook.id, { ...anotherBook, city: 'Madrid', phone: 1111, hobbies: ['cinema'] });
+			await delay(DIGESTION_TIME);
+
+			const getResponse = await getAuthor(author.id);
+			expect(getResponse.body.total_created_cnt).to.equal(2);
+			expect(getResponse.body.total_amends_cnt).to.equal(5);
+		});
 	});
 });
