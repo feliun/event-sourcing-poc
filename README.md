@@ -24,20 +24,20 @@ You can test the two available APIs with the following HTTP requests:
 ### Book API
 Create a book
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo", "id": "1"}' http://localhost:4000/api/v1/books
+curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": { "id": "1", "name": "Felipe Polo" }, "id": "1"}' http://localhost:4000/api/v1/books
 ```
 
 Update a book multiple times
 ```
-curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "id": "1"}' http://localhost:4000/api/v1/books/1
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": { "id": "1", "name": "Felipe Polo" }, "id": "1"}' http://localhost:4000/api/v1/books/1
 
-curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "location": "Madrid", "id": "1"}' http://localhost:4000/api/v1/books/1
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": { "id": "1", "name": "Felipe Polo" }, "location": "Madrid", "id": "1"}' http://localhost:4000/api/v1/books/1
 
-curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo Ruiz", "location": "Caceres", "id": "1"}' http://localhost:4000/api/v1/books/1
+curl -X PUT -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": { "id": "1", "name": "Felipe Polo" }, "location": "Caceres", "id": "1"}' http://localhost:4000/api/v1/books/1
 ```
 Reindex all book commands
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"title":"Event sourcing & CQRS", "author": "Felipe Polo"}' http://localhost:4000/api/v1/books/reindex
+curl -X POST http://localhost:4000/api/v1/books/reindex
 ```
 Get a book
 ```
@@ -48,4 +48,10 @@ curl -X GET http://localhost:4000/api/v1/books/1
 Create a paragraph on a book
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"title":"My paragraph", "text": "bla bla bla"}' http://localhost:4000/api/v1/books/1/paragraphs
+```
+
+### Author API
+Get an author
+```
+curl -X GET http://localhost:4000/api/v1/authors/1
 ```

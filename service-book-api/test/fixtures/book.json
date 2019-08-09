@@ -1,5 +1,8 @@
 {
   "title":"Event sourcing & CQRS",
-  "author": "Felipe Polo",
+  "author": {
+    "id": "1",
+    "name": "Felipe Polo"
+  },
   "id": "1"
 }

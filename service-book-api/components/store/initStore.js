@@ -13,6 +13,7 @@ module.exports = () => {
 		debug('Configuring db....');
 		db.collection('audit').createIndex({ entity: 1, timestamp: 1, id: 1 });
 		db.collection('books').createIndex({ id: 1 });
+		db.collection('authors').createIndex({ id: 1 });
 
 		const audit = async payload => {
 			debug('Recording a new audited item...');
@@ -43,15 +44,27 @@ module.exports = () => {
 			return book;
 		};
 
+		const upsertAuthor = async author => {
+			await db.collection('authors').updateOne({ id: author.id }, { $set: author }, { upsert: true });
+			return author;
+		};
+
 		const retrieveBook = async query => {
 			debug(`Retrieving book with query ${JSON.stringify(query)}`);
 			const result = await db.collection('books').findOne(query);
 			return result;
 		};
 
+		const retrieveAuthor = async query => {
+			debug(`Retrieving author with query ${JSON.stringify(query)}`);
+			const result = await db.collection('authors').findOne(query);
+			return result;
+		};
+
 		const purge = async () => {
 			await db.collection('audit').deleteMany({});
 			await db.collection('books').deleteMany({});
+			await db.collection('authors').deleteMany({});
 		};
 
 		return {
@@ -64,6 +77,10 @@ module.exports = () => {
 			books: {
 				upsert: upsertBook,
 				retrieve: retrieveBook,
+			},
+			authors: {
+				retrieve: retrieveAuthor,
+				upsert: upsertAuthor,
 			},
 		};
 	};
