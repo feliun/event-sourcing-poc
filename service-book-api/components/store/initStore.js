@@ -39,6 +39,20 @@ module.exports = () => {
 			return result;
 		};
 
+		const getCommandByEntityAndId = async (entity, id) => {
+			debug(`Getting all commands for entity ${entity} with id: ${id}`);
+
+			const result = await db.collection('audit')
+				.find({
+					entity,
+					id,
+				},
+				)
+				.sort({ timestamp: 1 })
+				.toArray();
+			return result;
+		};
+
 		const upsertBook = async book => {
 			await db.collection('books').updateOne({ id: book.id }, { $set: book }, { upsert: true });
 			return book;
@@ -73,6 +87,7 @@ module.exports = () => {
 				audit,
 				retrieve: retrieveCommands,
 				getByEntity: getCommandByEntity,
+				getByAggregate: getCommandByEntityAndId,
 			},
 			books: {
 				upsert: upsertBook,
