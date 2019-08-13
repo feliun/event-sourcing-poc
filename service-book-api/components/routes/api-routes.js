@@ -92,6 +92,7 @@ module.exports = () => {
 			const { params } = req;
 			const test = await queries.adhoc.testQuery('books', params.bookId);
 			res.json({
+				id: test.id,
 				title: test.title,
 			});
 		});

@@ -42,6 +42,11 @@ describe('e2e tests', () => {
 			.get(`/api/v1/books/${bookId}`)
 			.expect(200);
 
+	const getBookAdhoc = async bookId =>
+		request
+			.get(`/api/v1/books/adhoc/${bookId}`)
+			.expect(200);
+
 	const getAuthor = async authorId =>
 		request
 			.get(`/api/v1/authors/${authorId}`)
@@ -89,6 +94,17 @@ describe('e2e tests', () => {
 			await delay(DIGESTION_TIME);
 			const newGetResponse = await getBook(book.id);
 			expect(newGetResponse.body.phone).to.equal(1111);
+		});
+
+		describe('# Adhoc Queries', () => {
+			it('can query the book "adhoc"', async () => {
+				const response = await createBook(book);
+				expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+				expect(response.body).to.eql({ ok: true });
+				const getResponse = await getBookAdhoc(book.id);
+				expect(getResponse.body.id).to.equal(book.id);
+				expect(getResponse.body.title).to.equal(book.title);
+			});
 		});
 	});
 
