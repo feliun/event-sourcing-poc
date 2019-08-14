@@ -61,9 +61,10 @@ module.exports = () => {
 		 * @returns 200 - Sucessful response
 		*/
 		app.get('/api/v1/books/:bookId', async (req, res) => {
-			const { params } = req;
+			const { params, query } = req;
+			const handler = Boolean(query.adhoc) === true ? queries.books.adhoc : queries.books.getById;
 			try {
-				const book = await queries.books.getById(params.bookId);
+				const book = await handler(params.bookId);
 				res.json(book);
 			} catch (e) {
 				logger.error(e);
@@ -86,15 +87,6 @@ module.exports = () => {
 				logger.error(e);
 				res.sendStatus(500);
 			}
-		});
-
-		app.get('/api/v1/books/adhoc/:bookId', async (req, res) => {
-			const { params } = req;
-			const test = await queries.adhoc.testQuery('books', params.bookId);
-			res.json({
-				id: test.id,
-				title: test.title,
-			});
 		});
 
 		/**
