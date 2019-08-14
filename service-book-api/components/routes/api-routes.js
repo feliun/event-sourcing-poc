@@ -88,6 +88,15 @@ module.exports = () => {
 			}
 		});
 
+		app.get('/api/v1/books/adhoc/:bookId', async (req, res) => {
+			const { params } = req;
+			const test = await queries.adhoc.testQuery('books', params.bookId);
+			res.json({
+				id: test.id,
+				title: test.title,
+			});
+		});
+
 		/**
 		 * This endpoint creates a paragraph in a book
 		 * @route POST /api/v1/paragraphs
